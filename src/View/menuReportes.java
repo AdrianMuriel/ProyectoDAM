@@ -12,9 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Properties;
 
 import javax.help.HelpBroker;
@@ -31,23 +29,16 @@ import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.border.EmptyBorder;
 
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.view.JasperViewer;
-
-import Controller.gestionarConexion;
 import Model.Colecciones;
+import Controller.*;
 
 public class menuReportes extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField txtTitulo;
 	private static ArrayList<Colecciones> listaColecciones = new ArrayList<>();
-	private File repPath = new File(getClass().getResource("/data/reports/").getPath());
+	// private File repPath = new
+	// File(getClass().getResource("/data/reports/").getPath());
 
 	ClassLoader clLoad = this.getClass().getClassLoader();
 	File defaultProp = new File(clLoad.getResource("data/language/default.properties").getFile());
@@ -164,42 +155,16 @@ public class menuReportes extends JDialog {
 		});
 		btnColeccion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					gestionarConexion.conectar();
-					Map<String, Object> map = new HashMap<String, Object>();
-					map.put("nombre", cmbColeccion.getSelectedItem());
-					JasperReport report = JasperCompileManager
-							.compileReport(repPath.getCanonicalPath() + "/libreria_coleccion.jrxml");
-					JasperPrint jasperPrint = JasperFillManager.fillReport(report, map,
-							gestionarConexion.getConexion());
-					JasperExportManager.exportReportToPdfFile(jasperPrint,
-							repPath.getCanonicalPath() + "/libreria_coleccion.pdf");
-					gestionarConexion.cerrarConexion();
-
-					JasperViewer.viewReport(jasperPrint, false);
-				} catch (JRException | IOException e1) {
-					e1.printStackTrace();
-				}
+				gestionarSockets.gestCon.startConnection();
+				gestionarSockets.gestInf.getColeccionInformes(cmbColeccion.getSelectedItem().toString());
+				gestionarSockets.gestCon.endConnection();
 			}
 		});
 		btnTitulo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					gestionarConexion.conectar();
-					Map<String, Object> map = new HashMap<String, Object>();
-					map.put("nombre", txtTitulo.getText());
-					JasperReport report = JasperCompileManager
-							.compileReport(repPath.getCanonicalPath() + "/libreria_nombre.jrxml");
-					JasperPrint jasperPrint = JasperFillManager.fillReport(report, map,
-							gestionarConexion.getConexion());
-					JasperExportManager.exportReportToPdfFile(jasperPrint,
-							repPath.getCanonicalPath() + "/libreria_nombre.pdf");
-					gestionarConexion.cerrarConexion();
-
-					JasperViewer.viewReport(jasperPrint, false);
-				} catch (JRException | IOException e1) {
-					e1.printStackTrace();
-				}
+				gestionarSockets.gestCon.startConnection();
+				gestionarSockets.gestInf.getNombresInformes(txtTitulo.getText());
+				gestionarSockets.gestCon.endConnection();
 			}
 		});
 

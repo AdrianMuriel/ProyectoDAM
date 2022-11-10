@@ -287,6 +287,8 @@ public class menuPrincipal extends JFrame {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				setCursor(waitCursor);
+				gestionarSockets.gestCon.endConnection();
+				gestionarSockets.cerrarServidor();
 				setCursor(defaultCursor);
 			} // END windowClosing
 		});
@@ -340,20 +342,16 @@ public class menuPrincipal extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				setCursor(waitCursor);
 				Comics c = (Comics) cmbComics.getSelectedItem();
-				gestionarConexion.conectar();
-				int result = gestionarSockets.gestCom.removeComic(c);
-				if (result > 0) {
-					gestionarConexion.cerrarConexion();
-				}
+				gestionarSockets.gestCom.removeComic(c);
 				cmbComics.removeItemAt(cmbComics.getSelectedIndex());
 				setCursor(defaultCursor);
 			} // END btnEliminar
 		});
 		mnItBuscarComic.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				gestionarConexion.conectar();
+				gestionarSockets.gestCon.startConnection();
 				ArrayList<Colecciones> listaColecciones = gestionarSockets.gestCol.listarColecciones();
-				gestionarConexion.cerrarConexion();
+				gestionarSockets.gestCon.endConnection();
 				menuReportes.iniciar(listaColecciones);
 			} // END mnItBuscarComic
 		});
@@ -432,9 +430,9 @@ public class menuPrincipal extends JFrame {
 			JLabel lblColeccion,
 			JLabel lblEstado) {
 
-		gestionarConexion.conectar();
+		gestionarSockets.gestCon.startConnection();
 		ArrayList<Comics> listaComics = gestionarSockets.gestCom.listarComics();
-		gestionarConexion.cerrarConexion();
+		gestionarSockets.gestCon.endConnection();
 
 		cmbComics.removeAllItems();
 		for (Comics c : listaComics) {
@@ -478,9 +476,9 @@ public class menuPrincipal extends JFrame {
 	}
 
 	private void seleccionarColeccion(Comics c, JLabel lblColeccion) {
-		gestionarConexion.conectar();
+		gestionarSockets.gestCon.startConnection();
 		Colecciones col = gestionarSockets.gestCol.obtenerColeccion(c);
-		gestionarConexion.cerrarConexion();
+		gestionarSockets.gestCon.endConnection();
 		lblColeccion.setText(col.getTitulo());
 	}
 

@@ -2,21 +2,45 @@ package View;
 
 //-------- IMPORTS ------------------------------------------------------------
 //-------- PAQUETES -----------------------------------------------------------
-import java.awt.*;
-import java.util.*;
-import java.awt.event.*;
-import java.io.*;
+import java.awt.BorderLayout;
+import java.awt.Cursor;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Properties;
 
-import javax.help.*;
-import javax.swing.*;
-import javax.swing.GroupLayout.*;
+import javax.help.HelpBroker;
+import javax.help.HelpSet;
+import javax.help.HelpSetException;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import Controller.gestionarIdioma;
 //-------- CLASES -------------------------------------------------------------
-import Model.*;
-import Controller.*;
+import Model.Comics;
 
 public class menuConexion extends JDialog {
 
@@ -51,7 +75,7 @@ public class menuConexion extends JDialog {
     ClassLoader clLoad = this.getClass().getClassLoader();
     File defaultProp = new File(clLoad.getResource("data/language/default.properties").getFile());
     private static File conFile = new File(
-            gestionarConexion.class.getResource("/data/connection/connection.properties").getPath());
+            menuConexion.class.getResource("/data/connection/connection.properties").getPath());
     private HelpSet helpset = null;
     private HelpBroker browser = null;
     private static URL helpURL;

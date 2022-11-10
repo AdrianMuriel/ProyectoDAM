@@ -346,13 +346,11 @@ public class menuComics extends JDialog {
                 // --------------------------------------------------------------------
                 if (comic != null) {
                     try {
-                        gestionarConexion.conectar();
+                        gestionarSockets.gestCon.startConnection();
                         ArrayList<Colecciones> listaColecciones = gestionarSockets.gestCol.listarColecciones();
-                        gestionarConexion.cerrarConexion();
 
-                        gestionarConexion.conectar();
                         Colecciones col = gestionarSockets.gestCol.obtenerColeccion(comic);
-                        gestionarConexion.cerrarConexion();
+                        gestionarSockets.gestCon.endConnection();
 
                         for (Colecciones c : listaColecciones) {
                             cmbColeccion.addItem(c);
@@ -382,9 +380,7 @@ public class menuComics extends JDialog {
                         ImageIcon imageIcon = blobToImgIcon(blob);
 
                         lblPortadaComic.setIcon(imageIcon);
-                        gestionarConexion.conectar();
                         lblColección.setText(col.getTitulo());
-                        gestionarConexion.cerrarConexion();
 
                         txtTitulo.setEditable(false);
                         cmbColeccion.setEnabled(false);
@@ -396,9 +392,9 @@ public class menuComics extends JDialog {
                 } else {
                     try {
                         comic = new Comics();
-                        gestionarConexion.conectar();
+                        gestionarSockets.gestCon.startConnection();
                         ArrayList<Colecciones> listaColecciones = gestionarSockets.gestCol.listarColecciones();
-                        gestionarConexion.cerrarConexion();
+                        gestionarSockets.gestCon.endConnection();
                         for (Colecciones c : listaColecciones) {
                             cmbColeccion.addItem(c);
                         }
@@ -458,49 +454,40 @@ public class menuComics extends JDialog {
                                 "ERROR",
                                 JOptionPane.ERROR_MESSAGE);
                     } else {
-                        gestionarConexion.conectar();
-                        System.out.println(txtTitulo.getText());
-                        boolean existe = gestionarSockets.gestCom.getComic(txtTitulo.getText());
-                        gestionarConexion.cerrarConexion();
-                        if (existe) {
-                            JOptionPane.showMessageDialog(null,
-                                    "Ya existe un comic con el titulo " + txtTitulo.getText(),
-                                    "ERROR",
-                                    JOptionPane.ERROR_MESSAGE);
-                        } else {
-                            setCursor(waitCursor);
+                        setCursor(waitCursor);
 
-                            comic.setTitulo(txtTitulo.getText());
-                            comic.setCantidad((int) spCantidad.getValue());
-                            comic.setPrecio((Float) spPrecio.getValue());
-                            comic.setEstado(cmbEstado.getSelectedItem().toString());
-                            java.util.Date fechaU = (java.util.Date) spFecha.getValue();
-                            java.sql.Date fechaS = new java.sql.Date(fechaU.getTime());
-                            comic.setFecha(fechaS);
-                            Colecciones col = (Colecciones) cmbColeccion.getSelectedItem();
-                            comic.setNum_col(col.getNum_coleccion());
-                            try {
-                                gestionarConexion.conectar();
-                                if (titulo == "Crear Cómic") {
-                                    gestionarSockets.gestCom.addComic(comic, imgPath);
-                                } else {
-                                    gestionarSockets.gestCom.updateComic(comic, imgPath);
-                                }
-                                gestionarConexion.getConexion().commit();
+                        comic.setTitulo(txtTitulo.getText());
+                        comic.setCantidad((int) spCantidad.getValue());
+                        comic.setPrecio((Float) spPrecio.getValue());
+                        comic.setEstado(cmbEstado.getSelectedItem().toString());
+                        java.util.Date fechaU = (java.util.Date) spFecha.getValue();
+                        java.sql.Date fechaS = new java.sql.Date(fechaU.getTime());
+                        comic.setFecha(fechaS);
+                        Colecciones col = (Colecciones) cmbColeccion.getSelectedItem();
+                        comic.setNum_col(col.getNum_coleccion());
 
-                            } catch (SQLException ex) {
-                                ex.printStackTrace();
-                                try {
-                                    gestionarConexion.getConexion().rollback();
-                                } catch (SQLException e1) {
-                                    e1.printStackTrace();
-                                }
-                            } finally {
-                                setCursor(defaultCursor);
-                                gestionarConexion.cerrarConexion();
-                                dispose();
+                        if (titulo == "Crear Cómic") {
+                            gestionarSockets.gestCon.startConnection();
+                            boolean existe = gestionarSockets.gestCom.getComic(comic.getTitulo());
+                            gestionarSockets.gestCon.endConnection();
+                            if (existe) {
+                                JOptionPane.showMessageDialog(null,
+                                        "Ya existe un comic con el titulo " + comic.getTitulo(), "ERROR", 0);
+                            } else {
+                                gestionarSockets.gestCom.addComic(comic, imgPath);
                             }
+                        } else {
+                            gestionarSockets.gestCon.startConnection();
+                            if (imgPath == null) {
+                                gestionarSockets.gestCom.updateComicNoImage(comic);
+                            } else {
+                                gestionarSockets.gestCom.updateComic(comic, imgPath);
+                            }
+                            gestionarSockets.gestCon.endConnection();
                         }
+                        setCursor(defaultCursor);
+                        dispose();
+
                     }
                 }
             }
