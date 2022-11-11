@@ -474,14 +474,19 @@ public class menuComics extends JDialog {
                                 JOptionPane.showMessageDialog(null,
                                         "Ya existe un comic con el titulo " + comic.getTitulo(), "ERROR", 0);
                             } else {
-                                gestionarSockets.gestCom.addComic(comic, imgPath);
+                                File imagen = new File(imgPath);
+
+                                gestionarSockets.gestCon.startConnection();
+                                gestionarSockets.gestCom.addComic(comic, imagen);
+                                gestionarSockets.gestCon.endConnection();
                             }
                         } else {
                             gestionarSockets.gestCon.startConnection();
                             if (imgPath == null) {
                                 gestionarSockets.gestCom.updateComicNoImage(comic);
                             } else {
-                                gestionarSockets.gestCom.updateComic(comic, imgPath);
+                                File imagen = new File(imgPath);
+                                gestionarSockets.gestCom.updateComic(comic, imagen);
                             }
                             gestionarSockets.gestCon.endConnection();
                         }

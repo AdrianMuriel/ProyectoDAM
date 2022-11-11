@@ -342,7 +342,9 @@ public class menuPrincipal extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				setCursor(waitCursor);
 				Comics c = (Comics) cmbComics.getSelectedItem();
+				gestionarSockets.gestCon.startConnection();
 				gestionarSockets.gestCom.removeComic(c);
+				gestionarSockets.gestCon.endConnection();
 				cmbComics.removeItemAt(cmbComics.getSelectedIndex());
 				setCursor(defaultCursor);
 			} // END btnEliminar
