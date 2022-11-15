@@ -27,15 +27,14 @@ public class gestionarInformes {
             File file = new File("informe.pdf");
             FileOutputStream fos = new FileOutputStream("informe.pdf");
             long size;
-            if (file.exists()) {
-                file.delete();
-            }
 
             size = in.readLong();
-            while ((bytes = in.read(
-                    buffer, 0,
-                    (int) Math.min(buffer.length, size))) != -1) {
+            while (size > 0
+                    && (bytes = in.read(
+                            buffer, 0,
+                            (int) Math.min(buffer.length, size))) != -1) {
                 fos.write(buffer, 0, bytes);
+                size -= bytes;
             }
             fos.close();
 
@@ -59,15 +58,14 @@ public class gestionarInformes {
             File file = new File("informe.pdf");
             FileOutputStream fos = new FileOutputStream("informe.pdf");
             long size;
-            if (file.exists()) {
-                file.delete();
-            }
 
             size = in.readLong();
-            while ((bytes = in.read(
-                    buffer, 0,
-                    (int) Math.min(buffer.length, size))) != -1) {
+            while (size > 0
+                    && (bytes = in.read(
+                            buffer, 0,
+                            (int) Math.min(buffer.length, size))) != -1) {
                 fos.write(buffer, 0, bytes);
+                size -= bytes;
             }
             fos.close();
             try {
