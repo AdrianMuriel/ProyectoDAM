@@ -13,7 +13,9 @@ public class gestionarIdioma {
      */
     public static void traducirMenu(ArrayList<JMenu> listMenu, ArrayList<JMenuItem> listMenuItems) {
         try {
-            ResourceBundle rb = ResourceBundle.getBundle("data.language.language");
+            String[] lang = Locale.getDefault().toString().split("_");
+            ResourceBundle rb = ResourceBundle
+                    .getBundle("data.language.language_" + lang[0] + "_" + lang[1].toUpperCase(), Locale.getDefault());
             for (JMenu mn : listMenu) {
                 String valor = rb.getString(mn.getName());
                 mn.setText(valor);
@@ -38,7 +40,9 @@ public class gestionarIdioma {
      */
     public static void traducirBotones(ArrayList<JButton> listButtons) {
         try {
-            ResourceBundle rb = ResourceBundle.getBundle("data.language.language");
+            String[] lang = Locale.getDefault().toString().split("_");
+            ResourceBundle rb = ResourceBundle
+                    .getBundle("data.language.language_" + lang[0] + "_" + lang[1].toUpperCase(), Locale.getDefault());
             for (JButton btn : listButtons) {
                 String valor = rb.getString(btn.getName());
                 btn.setText(valor);
@@ -57,7 +61,9 @@ public class gestionarIdioma {
 
     public static void traducirEtiquetas(ArrayList<JLabel> listLabel) {
         try {
-            ResourceBundle rb = ResourceBundle.getBundle("data.language.language");
+            String[] lang = Locale.getDefault().toString().split("_");
+            ResourceBundle rb = ResourceBundle
+                    .getBundle("data.language.language_" + lang[0] + "_" + lang[1].toUpperCase(), Locale.getDefault());
             for (JLabel lbl : listLabel) {
                 String valor = rb.getString(lbl.getName());
                 lbl.setText(valor);

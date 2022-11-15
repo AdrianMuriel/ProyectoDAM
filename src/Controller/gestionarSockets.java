@@ -19,6 +19,7 @@ public class gestionarSockets {
     public static void main(String[] args) {
 
         try {
+            //socket = new Socket("192.168.56.10", 5000);
             socket = new Socket("localhost", 5000);
             out = new ObjectOutputStream(socket.getOutputStream());
             in = new ObjectInputStream(socket.getInputStream());
@@ -28,7 +29,7 @@ public class gestionarSockets {
 
             gestCon = new gestionarConexion(in, out);
 
-            gestInf = new gestionarInformes(out);
+            gestInf = new gestionarInformes(in, out);
             menuPrincipal frame = new menuPrincipal();
             frame.setVisible(true);
 

@@ -42,4 +42,24 @@ public class gestionarConexion implements Serializable {
         }
     }
 
+    public String[] getConData() {
+        try {
+            out.writeObject("getConData");
+            String[] conData = (String[]) in.readObject();
+            return conData;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void setConData(String[] conData) {
+        try {
+            out.writeObject("SetConData");
+            out.writeObject(conData);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

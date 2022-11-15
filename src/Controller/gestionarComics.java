@@ -90,13 +90,16 @@ public class gestionarComics {
                             c.getCantidad() + "··" +
                             c.getFecha() + "··" +
                             c.getEstado());
+            long size = imagen.length();
             int bytes = 0;
             FileInputStream fis = new FileInputStream(imagen);
             out.writeLong(imagen.length());
             byte[] buffer = new byte[4 * 1024];
-            while ((bytes = fis.read(buffer)) != -1) {
+            while (size > 0
+                    && (bytes = fis.read(buffer)) != -1) {
                 out.write(buffer, 0, bytes);
                 out.flush();
+                size -= bytes;
             }
 
             fis.close();

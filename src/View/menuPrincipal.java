@@ -46,8 +46,6 @@ public class menuPrincipal extends JFrame {
 	// ----------- Otros --------------------------------------------------------
 	String msgAvisoCierre = "¿Estas seguro de que deseas cerrar el programa?";
 	String titleAvisoCierre = "EL PROGRAMA SE VA A CERRAR";
-	URL defaultProp = getClass().getResource("/data/language/default.properties");
-
 	public static Locale language;
 	private static Properties properties = new Properties();
 
@@ -265,8 +263,10 @@ public class menuPrincipal extends JFrame {
 			public void windowOpened(WindowEvent e) {
 				setCursor(waitCursor);
 				try {
+					File archivo = new File("./data/language/default.properties");
+					FileInputStream is = new FileInputStream(archivo);
 					// ------------------- TRADUCCION --------------------------------------
-					properties.load(defaultProp.openStream());
+					properties.load(is);
 					String locLang = String.valueOf(properties.getProperty("LANG"));
 					traducirPrograma(locLang, mnItGetHelp);
 					// ------------------- LISTADO -----------------------------------------
@@ -392,6 +392,7 @@ public class menuPrincipal extends JFrame {
 	private void cerrarPrograma() {
 		int opcion = JOptionPane.showConfirmDialog(null, msgAvisoCierre, titleAvisoCierre, 0, 2);
 		if (opcion == JOptionPane.YES_OPTION) {
+			gestionarSockets.cerrarServidor();
 			System.exit(0);
 		} // if
 	}
@@ -490,18 +491,21 @@ public class menuPrincipal extends JFrame {
 	 * @param idioma      Idioma al cual se va a traducir el programa
 	 * @param mnItGetHelp Botón del menú que abre la ayuda, a parte de el F1
 	 */
+	@Deprecated
 	private void traducirPrograma(String idioma, JMenuItem mnItGetHelp) {
 		try {
-			properties.load(defaultProp.openStream());
+			File archivo = new File("./data/language/default.properties");
+			FileInputStream is = new FileInputStream(archivo);
+			properties.load(is);
 			properties.setProperty("LANG", String.valueOf(idioma));
-			FileOutputStream osFile = new FileOutputStream(new File(defaultProp.getPath()));
-			defaultProp.openStream().transferTo(osFile);
+			FileOutputStream osFile = new FileOutputStream("./data/language/default.properties");
+			is.transferTo(osFile);
 			properties.store(osFile, null);
 			osFile.close();
 
-			properties.load(defaultProp.openStream());
+			properties.load(is);
 			String lang[] = String.valueOf(properties.getProperty("LANG")).split("_");
-			Locale.setDefault(Locale.of(idioma));
+			Locale.setDefault(new Locale(idioma));
 
 			switch (lang[0]) {
 				case "es":

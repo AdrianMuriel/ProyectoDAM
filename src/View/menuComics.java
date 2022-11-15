@@ -57,8 +57,6 @@ public class menuComics extends JDialog {
     static String titulo;
     static String imgPath;
     static Comics comic;
-    ClassLoader clLoad = this.getClass().getClassLoader();
-    File defaultProp = new File(clLoad.getResource("data/language/default.properties").getFile());
 
     private HelpSet helpset = null;
     private HelpBroker browser = null;
@@ -165,16 +163,16 @@ public class menuComics extends JDialog {
             gl_contentPanel.setHorizontalGroup(
                     gl_contentPanel.createParallelGroup(Alignment.TRAILING)
                             .addGroup(gl_contentPanel.createSequentialGroup()
-                                    .addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
-                                            .addGroup(Alignment.LEADING, gl_contentPanel.createSequentialGroup()
+                                    .addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
+                                            .addGroup(gl_contentPanel.createSequentialGroup()
                                                     .addContainerGap()
                                                     .addComponent(lblTituloPestanha, GroupLayout.DEFAULT_SIZE, 494,
                                                             Short.MAX_VALUE))
-                                            .addGroup(Alignment.LEADING, gl_contentPanel.createSequentialGroup()
-                                                    .addGroup(gl_contentPanel
-                                                            .createParallelGroup(Alignment.LEADING, false)
+                                            .addGroup(gl_contentPanel.createSequentialGroup()
+                                                    .addGap(6)
+                                                    .addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
                                                             .addGroup(gl_contentPanel.createSequentialGroup()
-                                                                    .addContainerGap()
+                                                                    .addPreferredGap(ComponentPlacement.RELATED)
                                                                     .addGroup(gl_contentPanel
                                                                             .createParallelGroup(Alignment.TRAILING,
                                                                                     false)
@@ -193,10 +191,10 @@ public class menuComics extends JDialog {
                                                                     .addGroup(gl_contentPanel
                                                                             .createParallelGroup(Alignment.TRAILING)
                                                                             .addComponent(lblPrecio,
-                                                                                    GroupLayout.DEFAULT_SIZE, 212,
+                                                                                    GroupLayout.DEFAULT_SIZE, 220,
                                                                                     Short.MAX_VALUE)
                                                                             .addComponent(lblEstado,
-                                                                                    GroupLayout.DEFAULT_SIZE, 212,
+                                                                                    GroupLayout.DEFAULT_SIZE, 220,
                                                                                     Short.MAX_VALUE)
                                                                             .addGroup(gl_contentPanel
                                                                                     .createSequentialGroup()
@@ -204,30 +202,27 @@ public class menuComics extends JDialog {
                                                                                             ComponentPlacement.RELATED)
                                                                                     .addComponent(lblColección,
                                                                                             GroupLayout.DEFAULT_SIZE,
-                                                                                            212, Short.MAX_VALUE))
+                                                                                            220, Short.MAX_VALUE))
                                                                             .addComponent(lblPortada, Alignment.LEADING,
                                                                                     GroupLayout.PREFERRED_SIZE, 220,
                                                                                     GroupLayout.PREFERRED_SIZE))))
                                                     .addPreferredGap(ComponentPlacement.UNRELATED)
-                                                    .addGroup(gl_contentPanel.createParallelGroup(Alignment.LEADING)
-                                                            .addComponent(lblPortadaComic, Alignment.TRAILING,
-                                                                    GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
-                                                            .addComponent(cmbColeccion, Alignment.TRAILING, 0, 268,
+                                                    .addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING)
+                                                            .addComponent(lblPortadaComic, GroupLayout.DEFAULT_SIZE,
+                                                                    262, Short.MAX_VALUE)
+                                                            .addComponent(cmbColeccion, 0, 262, Short.MAX_VALUE)
+                                                            .addComponent(spCantidad, GroupLayout.DEFAULT_SIZE, 262,
                                                                     Short.MAX_VALUE)
-                                                            .addComponent(spCantidad, Alignment.TRAILING,
-                                                                    GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
-                                                            .addComponent(spFecha, Alignment.TRAILING,
-                                                                    GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
-                                                            .addComponent(txtTitulo, Alignment.TRAILING,
-                                                                    GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
-                                                            .addComponent(cmbEstado, Alignment.TRAILING, 0, 268,
+                                                            .addComponent(spFecha, GroupLayout.DEFAULT_SIZE, 262,
                                                                     Short.MAX_VALUE)
-                                                            .addComponent(spPrecio, Alignment.TRAILING,
-                                                                    GroupLayout.DEFAULT_SIZE, 268, Short.MAX_VALUE)
-                                                            .addGroup(Alignment.TRAILING, gl_contentPanel
-                                                                    .createSequentialGroup()
+                                                            .addComponent(txtTitulo, GroupLayout.DEFAULT_SIZE, 262,
+                                                                    Short.MAX_VALUE)
+                                                            .addComponent(cmbEstado, 0, 262, Short.MAX_VALUE)
+                                                            .addComponent(spPrecio, GroupLayout.DEFAULT_SIZE, 262,
+                                                                    Short.MAX_VALUE)
+                                                            .addGroup(gl_contentPanel.createSequentialGroup()
                                                                     .addComponent(txtPortada, GroupLayout.DEFAULT_SIZE,
-                                                                            213, Short.MAX_VALUE)
+                                                                            207, Short.MAX_VALUE)
                                                                     .addPreferredGap(ComponentPlacement.UNRELATED)
                                                                     .addComponent(btnPortada)))))
                                     .addContainerGap()));
@@ -273,7 +268,7 @@ public class menuComics extends JDialog {
                                             .addComponent(txtPortada, GroupLayout.PREFERRED_SIZE,
                                                     GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                             .addComponent(btnPortada))
-                                    .addPreferredGap(ComponentPlacement.UNRELATED)
+                                    .addGap(18)
                                     .addComponent(lblPortadaComic, GroupLayout.PREFERRED_SIZE, 205,
                                             GroupLayout.PREFERRED_SIZE)));
             contentPanel.setLayout(gl_contentPanel);
@@ -296,6 +291,7 @@ public class menuComics extends JDialog {
         addWindowListener(new WindowAdapter() {
             // ----------- ABRIENDO EL PROGRAMA
             @Override
+            @Deprecated
             public void windowOpened(WindowEvent e) {
                 setCursor(waitCursor);
                 // --------------------------------------------------------------------
@@ -320,12 +316,13 @@ public class menuComics extends JDialog {
                 // Aquí configuro la ayuda y la lectura del idioma por defecto
                 // --------------------------------------------------------------------
                 try {
-                    FileInputStream isFile = new FileInputStream(defaultProp);
-                    properties.load(isFile);
+                    File archivo = new File("./data/language/default.properties");
+                    FileInputStream is = new FileInputStream(archivo);
+                    properties.load(is);
                     String locLang = String.valueOf(properties.get("LANG"));
                     traducirPrograma(locLang);
                     String lang[] = locLang.split("_");
-                    Locale.setDefault(Locale.of(locLang));
+                    Locale.setDefault(new Locale(locLang));
 
                     switch (lang[0]) {
                         case "es":
@@ -533,19 +530,21 @@ public class menuComics extends JDialog {
      * 
      * @param idioma Idioma al cual se va a traducir el programa
      */
+    @Deprecated
     private void traducirPrograma(String idioma) {
         try {
-            FileInputStream isFile = new FileInputStream(defaultProp);
-            properties.load(isFile);
+            File archivo = new File("./data/language/default.properties");
+            FileInputStream is = new FileInputStream(archivo);
+            properties.load(is);
             properties.setProperty("LANG", String.valueOf(idioma));
-            FileOutputStream osFile = new FileOutputStream(defaultProp);
+            FileOutputStream osFile = new FileOutputStream("./data/language/default.properties");
             properties.store(osFile, null);
             osFile.close();
 
-            properties.load(isFile);
+            properties.load(is);
             String lang[] = String.valueOf(properties.get("LANG")).split("_");
-            Locale.setDefault(Locale.of(idioma));
-            language = Locale.of(lang[0], lang[1]);
+            Locale.setDefault(new Locale(idioma));
+            language = new Locale(lang[0], lang[1]);
 
             Locale.setDefault(language);
 

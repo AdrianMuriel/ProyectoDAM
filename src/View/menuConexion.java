@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Locale;
@@ -39,6 +40,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import Controller.gestionarIdioma;
+import Controller.gestionarSockets;
 //-------- CLASES -------------------------------------------------------------
 import Model.Comics;
 
@@ -73,9 +75,7 @@ public class menuConexion extends JDialog {
     static String titulo;
     static Comics comic;
     ClassLoader clLoad = this.getClass().getClassLoader();
-    File defaultProp = new File(clLoad.getResource("data/language/default.properties").getFile());
-    private static File conFile = new File(
-            menuConexion.class.getResource("/data/connection/connection.properties").getPath());
+    InputStream defaultProp = clLoad.getResourceAsStream("/data/language/default.properties");
     private HelpSet helpset = null;
     private HelpBroker browser = null;
     private static URL helpURL;
@@ -246,6 +246,7 @@ public class menuConexion extends JDialog {
         addWindowListener(new WindowAdapter() {
             // ----------- ABRIENDO EL PROGRAMA
             @Override
+            @Deprecated
             public void windowOpened(WindowEvent e) {
                 setCursor(waitCursor);
                 // --------------------------------------------------------------------
@@ -269,12 +270,13 @@ public class menuConexion extends JDialog {
                 // Aquí configuro la ayuda y la lectura del idioma por defecto
                 // --------------------------------------------------------------------
                 try {
-                    FileInputStream isFile = new FileInputStream(defaultProp);
-                    properties.load(isFile);
+                    File archivo = new File("./data/language/default.properties");
+                    FileInputStream is = new FileInputStream(archivo);
+                    properties.load(is);
                     String locLang = String.valueOf(properties.get("LANG"));
                     traducirPrograma(locLang);
                     String lang[] = locLang.split("_");
-                    Locale.setDefault(Locale.of(locLang));
+                    Locale.setDefault(new Locale(locLang));
 
                     switch (lang[0]) {
                         case "es":
@@ -294,12 +296,12 @@ public class menuConexion extends JDialog {
                 // Aquí añado los datos a los campos de texto
                 // --------------------------------------------------------------------
                 try {
-                    properties.load(new FileInputStream(conFile));
-                    txtIP.setText(properties.getProperty("IP"));
-                    spPuerto.setValue(Integer.parseInt(properties.getProperty("PORT")));
-                    txtUsuario.setText(properties.getProperty("USER"));
-                    txtClave.setText(properties.getProperty("PASSWORD"));
-                    txtBD.setText(properties.getProperty("BD"));
+                    String[] conData = gestionarSockets.gestCon.getConData();
+                    txtIP.setText(conData[0]);
+                    spPuerto.setValue(Integer.parseInt(conData[1]));
+                    txtUsuario.setText(conData[2]);
+                    txtClave.setText(conData[3]);
+                    txtBD.setText(conData[4]);
                 } catch (Exception ex2) {
                     ex2.printStackTrace();
                 } finally {
@@ -323,17 +325,14 @@ public class menuConexion extends JDialog {
                     }
 
                     if (hasData) {
-                        properties.setProperty("IP", txtIP.getText());
-                        properties.setProperty("PORT", spPuerto.getValue().toString());
-                        properties.setProperty("USER", txtUsuario.getText());
-                        properties.setProperty("PASSWORD", txtClave.getText());
-                        properties.setProperty("BD", txtBD.getText());
-                        FileOutputStream osFile;
-                        osFile = new FileOutputStream(conFile);
-                        properties.store(osFile, null);
+                        String[] conData = new String[5];
+                        conData[0] = txtIP.getText();
+                        conData[1] = spPuerto.getValue().toString();
+                        conData[2] = txtUsuario.getText();
+                        conData[3] = txtClave.getText();
+                        conData[4] = txtBD.getText();
+                        gestionarSockets.gestCon.setConData(conData);
                     }
-                } catch (IOException e1) {
-                    e1.printStackTrace();
                 } finally {
                     setCursor(defaultCursor);
                     dispose();
@@ -376,18 +375,20 @@ public class menuConexion extends JDialog {
      * 
      * @param idioma Idioma al cual se va a traducir el programa
      */
+    @Deprecated
     private void traducirPrograma(String idioma) {
         try {
-            FileInputStream isFile = new FileInputStream(defaultProp);
-            properties.load(isFile);
-            properties.setProperty("LANG", String.valueOf(idioma));
-            FileOutputStream osFile = new FileOutputStream(defaultProp);
+            File archivo = new File("./data/language/default.properties");
+            FileInputStream is = new FileInputStream(archivo);
+            properties.load(is);
+            FileOutputStream osFile = new FileOutputStream("./data/language/default.properies");
+            is.transferTo(osFile);
             properties.store(osFile, null);
             osFile.close();
 
-            properties.load(isFile);
+            properties.load(is);
             String lang[] = String.valueOf(properties.get("LANG")).split("_");
-            Locale.setDefault(Locale.of(idioma));
+            Locale.setDefault(new Locale(idioma));
 
             switch (lang[0]) {
                 case "es":

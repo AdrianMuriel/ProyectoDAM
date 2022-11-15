@@ -37,11 +37,6 @@ public class menuReportes extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	private JTextField txtTitulo;
 	private static ArrayList<Colecciones> listaColecciones = new ArrayList<>();
-	// private File repPath = new
-	// File(getClass().getResource("/data/reports/").getPath());
-
-	ClassLoader clLoad = this.getClass().getClassLoader();
-	File defaultProp = new File(clLoad.getResource("data/language/default.properties").getFile());
 
 	private HelpSet helpset = null;
 	private HelpBroker browser = null;
@@ -125,17 +120,19 @@ public class menuReportes extends JDialog {
 		buttonPane.add(btnColeccion);
 		addWindowListener(new WindowAdapter() {
 			@Override
+			@Deprecated
 			public void windowOpened(WindowEvent e) {
 				for (Colecciones c : listaColecciones) {
 					cmbColeccion.addItem(c);
 				}
 				try {
-					FileInputStream isFile = new FileInputStream(defaultProp);
-					properties.load(isFile);
+					File archivo = new File("./data/language/default.properties");
+					FileInputStream is = new FileInputStream(archivo);
+					properties.load(is);
 					String locLang = String.valueOf(properties.get("LANG"));
 					traducirPrograma(locLang);
 					String lang[] = locLang.split("_");
-					Locale.setDefault(Locale.of(locLang));
+					Locale.setDefault(new Locale(locLang));
 
 					switch (lang[0]) {
 						case "es":
@@ -154,6 +151,7 @@ public class menuReportes extends JDialog {
 			}
 		});
 		btnColeccion.addActionListener(new ActionListener() {
+			@Deprecated
 			public void actionPerformed(ActionEvent e) {
 				gestionarSockets.gestCon.startConnection();
 				gestionarSockets.gestInf.getColeccionInformes(cmbColeccion.getSelectedItem().toString());
@@ -161,6 +159,7 @@ public class menuReportes extends JDialog {
 			}
 		});
 		btnTitulo.addActionListener(new ActionListener() {
+			@Deprecated
 			public void actionPerformed(ActionEvent e) {
 				gestionarSockets.gestCon.startConnection();
 				gestionarSockets.gestInf.getNombresInformes(txtTitulo.getText());
@@ -176,19 +175,21 @@ public class menuReportes extends JDialog {
 	 * 
 	 * @param idioma Idioma al cual se va a traducir el programa
 	 */
+	@Deprecated
 	private void traducirPrograma(String idioma) {
 		try {
-			FileInputStream isFile = new FileInputStream(defaultProp);
-			properties.load(isFile);
+			File archivo = new File("./data/language/default.properties");
+			FileInputStream is = new FileInputStream(archivo);
+			properties.load(is);
 			properties.setProperty("LANG", String.valueOf(idioma));
-			FileOutputStream osFile = new FileOutputStream(defaultProp);
+			FileOutputStream osFile = new FileOutputStream("./data/language/default.properties");
 			properties.store(osFile, null);
 			osFile.close();
 
-			properties.load(isFile);
+			properties.load(is);
 			String lang[] = String.valueOf(properties.get("LANG")).split("_");
-			Locale.setDefault(Locale.of(idioma));
-			language = Locale.of(lang[0], lang[1]);
+			Locale.setDefault(new Locale(idioma));
+			language = new Locale(lang[0], lang[1]);
 
 			Locale.setDefault(language);
 
