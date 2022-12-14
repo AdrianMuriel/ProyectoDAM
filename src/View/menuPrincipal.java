@@ -102,58 +102,60 @@ public class menuPrincipal extends JFrame {
 		{
 			groupLayout = new GroupLayout(getContentPane());
 			groupLayout.setHorizontalGroup(
-					groupLayout.createParallelGroup(Alignment.LEADING)
+				groupLayout.createParallelGroup(Alignment.LEADING)
+					.addGroup(groupLayout.createSequentialGroup()
+						.addContainerGap()
+						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 							.addGroup(groupLayout.createSequentialGroup()
-									.addContainerGap()
-									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-											.addGroup(groupLayout.createSequentialGroup()
-													.addComponent(btnModificar, GroupLayout.DEFAULT_SIZE, 198,
-															Short.MAX_VALUE)
-													.addGap(9))
-											.addComponent(lblEstado, GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
-											.addComponent(lblPrecio, GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
-											.addComponent(lblStock, GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
-											.addComponent(lblColeccion, GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
-											.addComponent(lblFecha, GroupLayout.DEFAULT_SIZE, 207, Short.MAX_VALUE)
-											.addGroup(groupLayout.createSequentialGroup()
-													.addComponent(cmbComics, GroupLayout.PREFERRED_SIZE, 166,
-															GroupLayout.PREFERRED_SIZE)
-													.addPreferredGap(ComponentPlacement.RELATED,
-															GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-													.addComponent(btnReload, GroupLayout.PREFERRED_SIZE, 35,
-															GroupLayout.PREFERRED_SIZE)))
-									.addGap(18)
-									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-											.addComponent(lblPortada, GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
-											.addComponent(btnEliminar, GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE))
-									.addContainerGap()));
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addGroup(groupLayout.createSequentialGroup()
+										.addComponent(btnModificar, GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE)
+										.addGap(9))
+									.addGroup(groupLayout.createSequentialGroup()
+										.addComponent(cmbComics, GroupLayout.PREFERRED_SIZE, 166, GroupLayout.PREFERRED_SIZE)
+										.addPreferredGap(ComponentPlacement.RELATED)
+										.addComponent(btnReload, GroupLayout.PREFERRED_SIZE, 35, GroupLayout.PREFERRED_SIZE)
+										.addGap(0, 0, Short.MAX_VALUE)))
+								.addGap(18))
+							.addGroup(groupLayout.createSequentialGroup()
+								.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+									.addComponent(lblColeccion, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(lblStock, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(lblPrecio, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(lblEstado, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+									.addComponent(lblFecha, GroupLayout.PREFERRED_SIZE, 219, GroupLayout.PREFERRED_SIZE))
+								.addPreferredGap(ComponentPlacement.RELATED)))
+						.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+							.addComponent(lblPortada, GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
+							.addComponent(btnEliminar, GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE))
+						.addContainerGap())
+			);
 			groupLayout.setVerticalGroup(
-					groupLayout.createParallelGroup(Alignment.TRAILING)
+				groupLayout.createParallelGroup(Alignment.TRAILING)
+					.addGroup(groupLayout.createSequentialGroup()
+						.addContainerGap()
+						.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
 							.addGroup(groupLayout.createSequentialGroup()
-									.addContainerGap()
-									.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-											.addGroup(groupLayout.createSequentialGroup()
-													.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-															.addComponent(btnReload, 0, 0, Short.MAX_VALUE)
-															.addComponent(cmbComics, GroupLayout.PREFERRED_SIZE,
-																	GroupLayout.DEFAULT_SIZE,
-																	GroupLayout.PREFERRED_SIZE))
-													.addGap(18)
-													.addComponent(lblFecha)
-													.addPreferredGap(ComponentPlacement.UNRELATED)
-													.addComponent(lblColeccion)
-													.addPreferredGap(ComponentPlacement.UNRELATED)
-													.addComponent(lblStock)
-													.addPreferredGap(ComponentPlacement.UNRELATED)
-													.addComponent(lblPrecio)
-													.addPreferredGap(ComponentPlacement.UNRELATED)
-													.addComponent(lblEstado))
-											.addComponent(lblPortada, GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE))
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-											.addComponent(btnModificar)
-											.addComponent(btnEliminar))
-									.addContainerGap()));
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
+									.addComponent(btnReload, 0, 0, Short.MAX_VALUE)
+									.addComponent(cmbComics, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+								.addGap(11)
+								.addComponent(lblFecha)
+								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addComponent(lblColeccion)
+								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addComponent(lblStock)
+								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addComponent(lblPrecio)
+								.addPreferredGap(ComponentPlacement.UNRELATED)
+								.addComponent(lblEstado))
+							.addComponent(lblPortada, GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE))
+						.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(btnModificar)
+							.addComponent(btnEliminar))
+						.addContainerGap())
+			);
 			getContentPane().setLayout(groupLayout);
 		}
 		// ----------------------------------------------------------------------------------------------------------------------------
@@ -291,6 +293,19 @@ public class menuPrincipal extends JFrame {
 				gestionarSockets.cerrarServidor();
 				setCursor(defaultCursor);
 			} // END windowClosing
+		});
+		addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				lblPortada.setSize(getWidth() / 3, getHeight()/2);
+				Comics c = (Comics) cmbComics.getSelectedItem();
+				if (c != null) {
+					Blob blob = c.getImagen();
+					ImageIcon imageIcon = blobToImgIcon(blob, lblPortada);
+
+					lblPortada.setIcon(imageIcon);
+				}
+			}// END componentResize
 		});
 		mnItSalir.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -472,8 +487,6 @@ public class menuPrincipal extends JFrame {
 
 		Blob blob = c.getImagen();
 		ImageIcon imageIcon = blobToImgIcon(blob, lblPortada);
-
-		lblPortada.setIcon(imageIcon);
 
 		lblPortada.setIcon(imageIcon);
 	}

@@ -377,6 +377,7 @@ public class menuComics extends JDialog {
                         ImageIcon imageIcon = blobToImgIcon(blob);
 
                         lblPortadaComic.setIcon(imageIcon);
+                        lblPortadaComic.setSize(getWidth() / 2, getHeight());
                         lblColección.setText(col.getTitulo());
 
                         txtTitulo.setEditable(false);
@@ -403,6 +404,18 @@ public class menuComics extends JDialog {
                 }
             }
         });
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                lblPortadaComic.setSize(getWidth() / 3, getHeight() / 2);
+                if (comic.getImagen() != null) {
+                    Blob blob = comic.getImagen();
+                    ImageIcon imageIcon = blobToImgIcon(blob);
+                    lblPortadaComic.setIcon(imageIcon);
+                } 
+
+            }
+        });
         // ----------------------------------------------------------------------------------------------------------------------------
         // ----------- OTROS
         btnPortada.addActionListener(new ActionListener() {
@@ -426,6 +439,7 @@ public class menuComics extends JDialog {
                         ImageIcon imageIcon = blobToImgIcon(img);
 
                         lblPortadaComic.setIcon(imageIcon);
+                        lblPortadaComic.setSize(getWidth() / 3, getHeight()/ 2);
                         txtPortada.setText(archivo.getName());
                     }
                 } catch (FileNotFoundException e1) {

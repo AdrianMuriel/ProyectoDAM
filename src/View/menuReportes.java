@@ -122,6 +122,7 @@ public class menuReportes extends JDialog {
 			@Override
 			@Deprecated
 			public void windowOpened(WindowEvent e) {
+				cmbColeccion.removeAllItems();
 				for (Colecciones c : listaColecciones) {
 					cmbColeccion.addItem(c);
 				}
